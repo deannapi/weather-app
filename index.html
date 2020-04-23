@@ -4,10 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-    <h1>Weather Dashboard</h1>
-    
+    <header>
+        <h1>Weather Dashboard</h1>
+    </header>
+
+    <!-- Search For a City on Left of Window -->
+    <div class="grid-container">
+        <div class="city-search">Search For A City: 
+            <input type="text" id="cityInput" style="text-transform: uppercase" />
+            <button class="searchBtn" type="submit"><span class="oi oi-magnifying-glass"></span></button>
+
+        </div>
+        <!-- This shows the search history and is reclickable -->
+        <div class="city-history">
+
+        </div>
+
+    <!-- Right Half of Window shows Results -->
+        <div class="weather">
+            <h2 id="city"><img src="" id="icon"></h2>
+            <h3 id="today"></h3>
+                <ul>
+                    <li class="temp"></li>
+                    <li class="humid"></li>
+                    <li class="speed"></li>
+                    <li class="uv"></li>
+                </ul>
+
+        </div>
+    </div>  
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="./assets/js/script.js"></script>
 </body>
 </html>
