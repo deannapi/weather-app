@@ -1,21 +1,3 @@
-// const apikey = "475f5f6bb734d8c713688458591cd41b";
-// const url = 'https://api.openweathermap.org/data/2.5/';
-
-// // Get City Input
-// $('.searchBtn').on('click', function() {
-//     var location = $('#cityInput').val();
-//     var cityHistory = $('.city-history');
-//     // For each city input, create new button in city history
-//     var oldCity = $('<button/>', {
-//         text: location,
-//         id: 'btn_'+ location,
-//     });
-//     $('.city-history').append(oldCity);
-//     console.log(location);
-// });
-
-
-
 // Get Current Weather
 $(".searchBtn").on('click', function getWeather () {
     var cityName = $('#cityInput').val().toUpperCase();
@@ -30,15 +12,25 @@ $(".searchBtn").on('click', function getWeather () {
         var iconurl = "https://openweathermap.org/img/w/" + condition + ".png";
         $("#icon").attr('src', iconurl);
         var humidity = weatherData.main.humidity;
-        $("#humid").text("Humidity: " + humidity + "%");
+        $(".humid").text("Humidity: " + humidity + "%");
         var speed = weatherData.wind.speed;
-        $("#speed").text("Wind Speed: " + speed + "MPH");
-        var temp = weatherData.main.temp;
-        $("#temp").text("Temperature: " + temp + "\xB0 F");
-        var uvIndex = 2.5;
-        $("#uv").text("UV Index: " + uvIndex);
+        $(".speed").text("Wind Speed: " + speed + " MPH");
+        var tempK = weatherData.main.temp;
+        var tempF = Math.round((tempK - 273.15)*(9/5)+32);
+        $(".temp").text("Temperature: " + tempF + "\xB0 F");
+
+        //get Lat and Long to get UV Index
+        var lat = weatherData.coord.lat;
+        var long = weatherData.coord.lon;
+        //get UV Index
+        var apiuv = 'https://api.openweathermap.org/data/2.5/uvi?appid=475f5f6bb734d8c713688458591cd41b' + '&lat=' + lat + '&lon=' + long;
+        $.getJSON(apiuv, getUV);
+        function getUV(Data) {
+            var uvIndex = Data.value;
+            $(".uv").text("UV Index: " + uvIndex);
+        }
         // add these to the weather div
-        console.log(city, condition, humidity, speed, temp);
+        console.log(city, condition, humidity, speed, tempF);
     }
 });
 

@@ -54,8 +54,38 @@ header {
     grid-area: 1 / 3 / span 5 / span 5;
     text-align: end;
     justify-self: left;
+    display: inline;
+    width: 100%;
+    border: solid #30545c 2px;
+    margin: 5px;
+    padding: 10px;
+}
+#icon {
+    display: block;
+    align-content: flex-start;
+}
+.weather ul {
+    list-style: none;
+    display: inline-block;
 }
 
-.weather ul li {
-    list-style: none;
+.weather h3 {
+    text-align: left;
+}
+
+.weather h2 {
+    text-align: left;
+}
+
+.description {
+    text-align: left;
+}
+
+.uv {
+    background: red;
+    color: white;
+}
+
+.city-icon {
+    display: flex;
 }
