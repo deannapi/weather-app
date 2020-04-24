@@ -14,7 +14,7 @@ header {
 .grid-container {
     display: grid;
     grid-template-columns: 150px repeat(3, 1fr);
-    grid-template-rows: 75px repeat(5, 1fr);
+    grid-template-rows: auto;
     gap: 10px;
     padding: 10px;
     text-align: center;
@@ -31,7 +31,7 @@ header {
 
 #cityInput {
     font-size: 14px;
-    border: blue solid 2px;
+    border: #2366eb solid 2px;
 }
 
 .city-history {
@@ -59,6 +59,7 @@ header {
     border: solid #30545c 2px;
     margin: 5px;
     padding: 10px;
+    background: #9aced9;
 }
 #icon {
     display: block;

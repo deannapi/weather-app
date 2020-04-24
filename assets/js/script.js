@@ -28,11 +28,29 @@ $(".searchBtn").on('click', function getWeather () {
         function getUV(Data) {
             var uvIndex = Data.value;
             $(".uv").text("UV Index: " + uvIndex);
+            // color the uv index based of severity of the value
+            var uc_color = function() {
+                if(uvIndex >= 0 && uvIndex <= 2) {
+                    $('.uv').css({"background-color":"#00cc00", "color":"white"})
+                } else if (uvIndex > 2 && uvIndex <= 5) {
+                    $('.uv').css({"background-color":"#ffff00", "color":"white"})
+                } else if (uvIndex > 5 && uvIndex <= 7) {
+                    $('.uv').css({"background-color":"#ff6600", "color":"white"})
+                } else if (uvIndex > 7) {
+                    $('.uv').css({"background-color":"red", "color":"white"})
+                }
+            }; 
+            uc_color();
         }
         // add these to the weather div
         console.log(city, condition, humidity, speed, tempF);
+        // local storage of current weather
+        // localStorage.setItem("current", JSON.stringify())
     }
 });
+
+
+
 
 
 // At same time show 5 day forecast for City Input
