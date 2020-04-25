@@ -15,10 +15,11 @@
 * Bootstrap
 * Moment.js
 * Server Side API's
+    * OpenWeatherMap
 
 ## Website
 https://deannapi.github.io/weather-app/
 
-(insert screenshot here)
+![weather-app](weather-app-visual.jpg)
 
 ## Made By DeAnna Martinez

@@ -65,7 +65,7 @@ header {
     display: block;
     align-content: flex-start;
 }
-.weather ul {
+ul {
     list-style: none;
     display: inline-block;
 }
@@ -82,11 +82,20 @@ header {
     text-align: left;
 }
 
-.uv {
-    background: red;
-    color: white;
-}
 
 .city-icon {
     display: flex;
+}
+
+.day1, .day2, .day3, .day4, .day5 {
+    background: #2366eb;
+    color: white;
+    display: inline-grid;
+    width: 80%;
+    padding: 3px;
+    gap: 5px;
+}
+
+.weather5 {
+    grid-area: 6 / 3/ span 5 / span 5;
 }
