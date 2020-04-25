@@ -1,12 +1,21 @@
 // Get Current Weather
 $(".searchBtn").on('click', function getWeather () {
     var cityName = $('#cityInput').val().toUpperCase();
+    // Get Today's Date
+    var today = $('#today').text(moment().format('MMMM Do, YYYY'));
+    // API for Current Weather
     var apiCall = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=475f5f6bb734d8c713688458591cd41b';
+    // API for 5 Day Forecast
     var apiFore = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&appid=475f5f6bb734d8c713688458591cd41b';
     $.getJSON(apiCall, weatherCallback);
     function weatherCallback(weatherData) {
-        // Get Today's Date
-        $('#today').text(moment().format('MMMM Do, YYYY'));
+        // if city input is misspelled or dne
+        // if(apiCall == null {
+        //     alert("City does not exist!");
+        //     return;
+        // } 
+
+        
         // Get weather info
         var city = weatherData.name;
         var condition = weatherData.weather[0].icon;
@@ -31,7 +40,7 @@ $(".searchBtn").on('click', function getWeather () {
             var uvIndex = Data.value;
             $(".uv").text("UV Index: " + uvIndex);
             // color the uv index based of severity of the value
-            var uc_color = function() {
+            var uv_color = function() {
                 if(uvIndex >= 0 && uvIndex <= 2) {
                     $('.uv').css({"background-color":"#00cc00", "color":"white"})
                 } else if (uvIndex > 2 && uvIndex <= 5) {
@@ -42,7 +51,7 @@ $(".searchBtn").on('click', function getWeather () {
                     $('.uv').css({"background-color":"red", "color":"white"})
                 }
             }; 
-            uc_color();
+            uv_color();
         }
         // local storage of current weather
         var curWeather = JSON.parse(localStorage.getItem("current")) || {};
@@ -51,19 +60,20 @@ $(".searchBtn").on('click', function getWeather () {
     }
 
     // 5 Day Forecast
-    // $.getJSON(apiFore, weatherForecast);
-    // function weatherForecast(foreData) {
-    //     console.log("5-day: " + foreData.list.main.temp);
-    // };
-    var getForecast = function(forecast) {
+    var getForecast = function() {
         fetch(apiFore).then(function(weatherFore) {
             if(weatherFore.ok) {
                 weatherFore.json().then(function(data) {
-                    var day1 = data.list[0];
-                    var day2 = data.list[7];
-                    var day3 = data.list[15];
-                    var day4 = data.list[23];
-                    var day5 = data.list[31];
+                    var currentDate = moment().format('YYYY-MM-DD');
+                    let trimmedData = data.list.filter((item) => {
+                        return item.dt_txt.slice(0, 10) !== currentDate
+                    }); console.log(trimmedData);
+                    
+                    var day1 = trimmedData[0];
+                    var day2 = trimmedData[8];
+                    var day3 = trimmedData[16];
+                    var day4 = trimmedData[24];
+                    var day5 = trimmedData[32];
                     console.log(day1, day2, day3, day4, day5);
                     //Day 1 Forecast
                     $("#day1").text(moment(day1.dt_txt).format('MM.DD.YY'));
@@ -73,7 +83,7 @@ $(".searchBtn").on('click', function getWeather () {
                     //Day 2
                     $("#day2").text(moment(day2.dt_txt).format('MM.DD.YY'));
                     $("#icon2").attr('src', "https://openweathermap.org/img/w/" + day2.weather[0].icon + ".png");
-                    $(".temp").text("Temp: " + Math.round(((day2.main.temp_max-273.15)*(9/5)+32)) + "\xB0 F");
+                    $(".temp2").text("Temp: " + Math.round(((day2.main.temp_max-273.15)*(9/5)+32)) + "\xB0 F");
                     $(".humid2").text("Humidity: " + day2.main.humidity + "%");
                     //Day 3
                     $("#day3").text(moment(day3.dt_txt).format('MM.DD.YY'));
@@ -95,10 +105,18 @@ $(".searchBtn").on('click', function getWeather () {
         });
     };
     getForecast();
+    var cityHistory = function() {
+       var cityH = document.createElement("button");
+       cityH.textContent = cityName;
+       var history = document.getElementById("city-history");
+       history.appendChild(cityH);
+    }
+    cityHistory();
 });
 
-// "Day 1: " + data.list[0],
-// "Day 2: " + data.list[7],
-// "Day 3: " + data.list[15],
-// "Day 4: " + data.list[23],
-// "Day 5: " + data.list[31])
+// fix the date forecasting
+
+// alert for misspelled city entries
+// alert for non-existing city entry
+
+// city history buttons
