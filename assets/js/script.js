@@ -2,63 +2,76 @@
 $(".searchBtn").on('click', function getWeather () {
     var cityName = $('#cityInput').val().toUpperCase();
     // Get Today's Date
-    var today = $('#today').text(moment().format('MMMM Do, YYYY'));
+    $('#today').text(moment().format('MMMM Do, YYYY'));
     // API for Current Weather
     var apiCall = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=475f5f6bb734d8c713688458591cd41b';
     // API for 5 Day Forecast
     var apiFore = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&appid=475f5f6bb734d8c713688458591cd41b';
-    $.getJSON(apiCall, weatherCallback);
-    function weatherCallback(weatherData) {
-        // if city input is misspelled or dne
-        // if(apiCall == null {
-        //     alert("City does not exist!");
-        //     return;
-        // } 
-
+   
+    var getCurrent = function() {
+        fetch(apiCall).then(function(currentWeather){
+            if(currentWeather.ok){
+                currentWeather.json().then(function(weatherData) {
+                // $.getJSON(apiCall, weatherCallback);
+                // function weatherCallback(weatherData) {
+                    // Get weather info
+                    var city = weatherData.name;
+                    var condition = weatherData.weather[0].icon;
+                    $("#city").text("The weather in " + city);
+                    var iconurl = "https://openweathermap.org/img/w/" + condition + ".png";
+                    $("#icon").attr('src', iconurl);
+                    var humidity = weatherData.main.humidity;
+                    $(".humid").text("Humidity: " + humidity + "%");
+                    var speed = weatherData.wind.speed;
+                    $(".speed").text("Wind Speed: " + speed + " MPH");
+                    var tempK = weatherData.main.temp;
+                    var tempF = Math.round((tempK - 273.15)*(9/5)+32);
+                    $(".temp").text("Temperature: " + tempF + "\xB0 F");
         
-        // Get weather info
-        var city = weatherData.name;
-        var condition = weatherData.weather[0].icon;
-        $("#city").text("The weather in " + city);
-        var iconurl = "https://openweathermap.org/img/w/" + condition + ".png";
-        $("#icon").attr('src', iconurl);
-        var humidity = weatherData.main.humidity;
-        $(".humid").text("Humidity: " + humidity + "%");
-        var speed = weatherData.wind.speed;
-        $(".speed").text("Wind Speed: " + speed + " MPH");
-        var tempK = weatherData.main.temp;
-        var tempF = Math.round((tempK - 273.15)*(9/5)+32);
-        $(".temp").text("Temperature: " + tempF + "\xB0 F");
+                    //get Lat and Long to get UV Index
+                    var lat = weatherData.coord.lat;
+                    var long = weatherData.coord.lon;
+                    //get UV Index
+                    var apiuv = 'https://api.openweathermap.org/data/2.5/uvi?appid=475f5f6bb734d8c713688458591cd41b' + '&lat=' + lat + '&lon=' + long;
+                    $.getJSON(apiuv, getUV);
+                    function getUV(Data) {
+                        var uvIndex = Data.value;
+                        $(".uv").text("UV Index: " + uvIndex);
+                        // color the uv index based of severity of the value
+                        var uv_color = function() {
+                            if(uvIndex >= 0 && uvIndex <= 2) {
+                                $('.uv').css({"background-color":"#00cc00", "color":"white"})
+                            } else if (uvIndex > 2 && uvIndex <= 5) {
+                                $('.uv').css({"background-color":"#ffff00", "color":"black"})
+                            } else if (uvIndex > 5 && uvIndex <= 7) {
+                                $('.uv').css({"background-color":"#ff6600", "color":"white"})
+                            } else if (uvIndex > 7) {
+                                $('.uv').css({"background-color":"red", "color":"white"})
+                            }
+                        }; 
+                        uv_color();
+                    }
+                    // local storage of current weather
+                    var curWeather = JSON.parse(localStorage.getItem("current")) || {};
+                    curWeather = city + condition + humidity + speed + tempF;
+                    localStorage.setItem("current", JSON.stringify(curWeather))
 
-        //get Lat and Long to get UV Index
-        var lat = weatherData.coord.lat;
-        var long = weatherData.coord.lon;
-        //get UV Index
-        var apiuv = 'https://api.openweathermap.org/data/2.5/uvi?appid=475f5f6bb734d8c713688458591cd41b' + '&lat=' + lat + '&lon=' + long;
-        $.getJSON(apiuv, getUV);
-        function getUV(Data) {
-            var uvIndex = Data.value;
-            $(".uv").text("UV Index: " + uvIndex);
-            // color the uv index based of severity of the value
-            var uv_color = function() {
-                if(uvIndex >= 0 && uvIndex <= 2) {
-                    $('.uv').css({"background-color":"#00cc00", "color":"white"})
-                } else if (uvIndex > 2 && uvIndex <= 5) {
-                    $('.uv').css({"background-color":"#ffff00", "color":"white"})
-                } else if (uvIndex > 5 && uvIndex <= 7) {
-                    $('.uv').css({"background-color":"#ff6600", "color":"white"})
-                } else if (uvIndex > 7) {
-                    $('.uv').css({"background-color":"red", "color":"white"})
-                }
-            }; 
-            uv_color();
-        }
-        // local storage of current weather
-        var curWeather = JSON.parse(localStorage.getItem("current")) || {};
-        curWeather = city + condition + humidity + speed + tempF;
-        localStorage.setItem("current", JSON.stringify(curWeather))
-    }
+                     // Create buttons for city inputs
+                    var cityHistory = function() {
+                        var cityH = document.createElement("button");
+                        cityH.textContent = cityName;
+                        cityH.setAttribute("id", cityName);
+                        var history = document.getElementById("city-history");
+                        history.appendChild(cityH);
+                    }
+                    cityHistory();
+                });
+            } 
+            else {alert("Error: " + currentWeather.statusText); }
+        });
+    };
 
+    getCurrent();
     // 5 Day Forecast
     var getForecast = function() {
         fetch(apiFore).then(function(weatherFore) {
@@ -105,18 +118,33 @@ $(".searchBtn").on('click', function getWeather () {
         });
     };
     getForecast();
-    var cityHistory = function() {
-       var cityH = document.createElement("button");
-       cityH.textContent = cityName;
-       var history = document.getElementById("city-history");
-       history.appendChild(cityH);
-    }
-    cityHistory();
+   
 });
 
-// fix the date forecasting
-
+// $('#cityName').on('click', function historyWeather () {
+//     var city = $(cityName).val();
+//     // API for Current Weather
+//     var apiCall = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=475f5f6bb734d8c713688458591cd41b';
+//     // API for 5 Day Forecast
+//     var apiFore = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=475f5f6bb734d8c713688458591cd41b';
+//     fetch(apiCall).then(function(currentWeather) {
+//         if(currentWeather.ok) {
+//             currentWeather.json().then(function(data) {
+//                 $('#city').text(city);
+//             })
+//         }
+//     })
+//     fetch(apiFore).then(function(ForeWeather) {
+//         if(currentWeather.ok) {
+//             currentWeather.json().then(function(data) {
+                
+//             })
+//         }
+//     })
+// });
 // alert for misspelled city entries
 // alert for non-existing city entry
 
 // city history buttons
+
+// local storage and history buttons stay on page when refreshed
