@@ -187,8 +187,26 @@ footer {
         grid-area: 11 / 1 / span 3 / span 4;
     }
 
-    .weather5{ 
+    .weather5 { 
         grid-area: 7 / 1 / span 3 / span 5;
         gap: 10px;
+    }
+
+    .day1, .day2, .day3, .day4, .day5 {
+        background: #2366eb;
+        color: white;
+        display: inline-grid;
+        width: 100px;
+        height: 150px;
+        padding: 3px;
+        border-radius: 10px;
+    }
+
+    h5{
+        font-size: 14px;
+    }
+
+    .weather5 ul li { 
+        font-size: 14px;
     }
 }
