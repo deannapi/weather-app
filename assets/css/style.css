@@ -136,3 +136,59 @@ footer {
 .city-history button:hover {
     background: #99ccff;
 }
+
+/*MEDIA QUERY FOR SMALL DESKTOP SCREENS AND SMALLER */
+@media screen and (max-width: 980px) {
+
+}
+
+/*MEDIA QUERY FOR TABLETS AND SMALLER */
+@media screen and (max-width: 768px) {
+
+}
+
+/*MEDIA QUERY FOR MOBILE PHONES AND SMALLER */
+@media screen and (max-width: 575px) {
+    .city-search {
+        margin: 0;
+        padding: 5px;
+        grid-area: 1 / 1 / span 1 / span 4;
+        justify-self: flex-start;
+        font-size: 20px;
+        display: inline-table;
+    }
+
+    .weather {
+        border-left: black solid 3px;
+        grid-area: 2 / 1 / span 3 / span 4;
+        text-align: end;
+        justify-self: left;
+        display: inline;
+        width: 100%;
+        border: solid #2366eb 3px;
+        margin: 5px;
+        padding: 10px;
+        background: #99ccff;
+    }
+
+    #today {
+        font-size: 18px;
+    }
+
+    #city {
+        font-size: 18px;
+    }
+
+    .description ul li {
+        font-size: 15px;
+    }
+
+    .city-history{
+        grid-area: 11 / 1 / span 3 / span 4;
+    }
+
+    .weather5{ 
+        grid-area: 7 / 1 / span 3 / span 5;
+        gap: 10px;
+    }
+}
